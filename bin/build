@@ -1,0 +1,41 @@
+#!/bin/bash
+# -*- mode: bash -*-
+
+# Reports the configuration of Go and builds Offer.  This script also generates a sentinel file `binary-name.txt' which
+# will contain the Git hash of the HEAD commit.  This sentinel is used by other scripts including `push' to
+# apply versioning to the Offer artifacts.  Depends on `git` and `go`
+#
+# Usage:
+#   bin/build
+#
+# !!! If ran for a linux machine:
+#   Uncomment the lines that export the GOOS and GOARCH vars
+#
+# Environment variables:
+#
+#   GOPATH        Specifies the path used by Go.  If unset, will be set to the current working directory
+#   SKIP_BUILD_EXTRAS   When set, don't build any extras -- API docs, tools, anything other than the Offer HTTP server
+# 
+
+[[ -n $GOPATH ]] || GOPATH=$(pwd)
+export GOPATH
+
+pushd "$(dirname "${BASH_SOURCE[0]}")/../server/" > /dev/null || exit 1
+
+  set -e
+
+  if [ -n "$DEBUG" ]; then
+    set -x
+  fi
+
+  go version
+  go env
+
+  version="$(git rev-parse --short HEAD)"
+  GO_FLAGS=(-ldflags "-X github.com/maazghani/fan-al-harb.version=$version")
+
+  echo "Building fan-al-harb HTTP server (version: $version)..."
+  go build "${GO_FLAGS[@]}" -o "$GOPATH/bin/fan-al-harb"
+
+popd > /dev/null
+

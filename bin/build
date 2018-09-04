@@ -35,7 +35,7 @@ pushd "$(dirname "${BASH_SOURCE[0]}")/../server/" > /dev/null || exit 1
   GO_FLAGS=(-ldflags "-X github.com/maazghani/fan-al-harb.version=$version")
 
   echo "Building fan-al-harb HTTP server (version: $version)..."
-  go build "${GO_FLAGS[@]}" -o "$GOPATH/bin/fan-al-harb"
+  go build CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -tags netgo -ldflags '-w -extldflags "-static" '"${GO_FLAGS[@]}" -o "fan-al-harb"
 
 popd > /dev/null
 

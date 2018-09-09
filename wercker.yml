@@ -1,0 +1,11 @@
+box: golang
+build:
+  steps:
+    - setup-go-workspace
+    - script:
+        name: go build
+        code: |
+          bin/build
+    - internal/docker-build: 
+        dockerfile: Dockerfile 
+        image-name: fan-al-harb:$WERCKER_GIT_COMMIT # temporary name used to refer to this image in a subsequent step

@@ -14,3 +14,9 @@ build:
         password: $PASSWORD
         tag: $WERCKER_GIT_COMMIT
         repository: maazghani/fan-al-harb
+    - kubectl:
+        server: $KUBERNETES_MASTER
+        username: $KUBERNETES_USERNAME
+        password: $KUBERNETES_PASSWORD
+        insecure-skip-tls-verify: true
+        command: apply -f k8s.yml

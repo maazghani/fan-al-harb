@@ -9,3 +9,8 @@ build:
     - internal/docker-build: 
         dockerfile: Dockerfile 
         image-name: fan-al-harb:$WERCKER_GIT_COMMIT # temporary name used to refer to this image in a subsequent step
+    - internal/docker-push:
+        username: $USERNAME
+        password: $PASSWORD
+        tag: $WERCKER_GIT_COMMIT
+        repository: maazghani/fan-al-harb

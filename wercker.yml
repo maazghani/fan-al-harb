@@ -9,10 +9,8 @@ build:
     - internal/docker-build: 
         dockerfile: Dockerfile 
         image-name: fan-al-harb:$WERCKER_GIT_COMMIT # temporary name used to refer to this image in a subsequent step
-    - internal/docker-push: 
-        image-name: fan-al-harb:$WERCKER_GIT_COMMIT
-        username: $USERNAME # Docker Hub username. When using CLI, set using "export X_USERNAME="  
-        password: $PASSWORD # Docker Hub password. When using CLI, set using "export X_PASSWORD=" 
-        registry: https://hub.docker.com
-        repository: maazghani/fan-al-harb
+    - internal/docker-push:
+        username: $USERNAME
+        password: $PASSWORD
         tag: $WERCKER_GIT_COMMIT
+        repository: maazghani/fan-al-harb

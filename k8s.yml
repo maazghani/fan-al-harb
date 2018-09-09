@@ -1,0 +1,47 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: fan-al-harb
+  namespace: fan-al-harb
+spec:
+  replicas: 10
+  template:
+    metadata:
+      labels:
+        app: fan-al-harb
+    spec:
+      containers:
+      - name: fan-al-harb
+        image: maazghani/fan-al-harb:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: fan-al-harb
+  name: fan-al-harb
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: fan-al-harb
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+    name: "fan-al-harb"
+    namespace: fan-al-harb
+spec:
+    scaleTargetRef:
+        apiVersion: extensions/v1beta1
+        kind: Deployment
+        name: "fan-al-harb"
+    minReplicas: 10
+    maxReplicas: 30
+    targetCPUUtilizationPercentage: 25
+
+
+
